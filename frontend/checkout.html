@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Checkout - Hayma Grocery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <main class="max-w-2xl mx-auto p-4">
+      <h1 class="text-2xl font-semibold mb-4">Checkout</h1>
+      <form id="form" class="bg-white border rounded p-4 space-y-3">
+        <textarea id="address" class="w-full border rounded px-3 py-2" placeholder="Delivery address" rows="3"></textarea>
+        <select id="payment" class="w-full border rounded px-3 py-2">
+          <option value="cod">Cash on Delivery</option>
+        </select>
+        <input id="coupon" class="w-full border rounded px-3 py-2" placeholder="Coupon code (optional)" />
+        <button class="w-full px-4 py-2 rounded bg-emerald-600 text-white">Place Order</button>
+      </form>
+    </main>
+    <script type="module">
+      import { placeOrder } from './js/orders.js';
+
+      const form = document.getElementById('form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const shipping_address = document.getElementById('address').value;
+        const payment_method = document.getElementById('payment').value;
+        const coupon = document.getElementById('coupon').value.trim();
+        const ok = await placeOrder({ shipping_address, payment_method, coupon });
+        if (ok) {
+          alert('Order placed');
+          window.location.href = '/frontend/orders.html';
+        } else {
+          alert('Order failed');
+        }
+      });
+    </script>
+  </body>
+  </html>
+
+

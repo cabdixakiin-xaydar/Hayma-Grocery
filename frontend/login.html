@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Hayma Grocery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <main class="min-h-screen grid place-items-center p-4">
+      <form id="form" class="w-full max-w-sm bg-white border rounded p-6 space-y-4">
+        <h1 class="text-xl font-semibold">Login</h1>
+        <input id="username" class="w-full border rounded px-3 py-2" placeholder="Username" />
+        <input id="password" type="password" class="w-full border rounded px-3 py-2" placeholder="Password" />
+        <button class="w-full px-3 py-2 rounded bg-emerald-600 text-white">Login</button>
+        <p class="text-sm">No account? <a href="/frontend/register.html" class="text-emerald-700">Register</a></p>
+      </form>
+    </main>
+    <script type="module">
+      import { login } from './js/auth.js';
+      const form = document.getElementById('form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const ok = await login(username, password);
+        if (ok) window.location.href = '/frontend/index.html';
+        else alert('Login failed');
+      });
+    </script>
+  </body>
+  </html>
+
+

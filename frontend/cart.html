@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cart - Hayma Grocery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <main class="max-w-3xl mx-auto p-4">
+      <h1 class="text-2xl font-semibold mb-4">Your Cart</h1>
+      <div id="items" class="space-y-3 mb-6"></div>
+      <div class="flex items-center justify-between">
+        <a href="/frontend/index.html" class="text-emerald-700">Continue shopping</a>
+        <a href="/frontend/checkout.html" class="px-4 py-2 rounded bg-emerald-600 text-white">Checkout</a>
+      </div>
+    </main>
+    <script type="module">
+      import { getCart, updateCartItem, removeFromCart } from './js/cart.js';
+
+      const itemsDiv = document.getElementById('items');
+
+      async function load() {
+        const cart = await getCart();
+        itemsDiv.innerHTML = '';
+        if (!cart || !cart.items || cart.items.length === 0) {
+          itemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+          return;
+        }
+        cart.items.forEach((ci) => {
+          const row = document.createElement('div');
+          row.className = 'bg-white border rounded p-3 flex items-center justify-between gap-4';
+          row.innerHTML = `
+            <div>
+              <div class="font-medium">${ci.product?.name || 'Product'}</div>
+              <div class="text-sm text-gray-600">$${Number(ci.product?.price || ci.price || 0).toFixed(2)}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="number" min="1" value="${ci.quantity}" class="qty border rounded w-20 px-2 py-1" />
+              <button class="save px-3 py-1 rounded border">Save</button>
+              <button class="remove px-3 py-1 rounded border text-red-600">Remove</button>
+            </div>
+          `;
+          row.querySelector('.save').addEventListener('click', async () => {
+            const q = parseInt(row.querySelector('.qty').value || '1', 10);
+            await updateCartItem(ci.product.id, q);
+            await load();
+          });
+          row.querySelector('.remove').addEventListener('click', async () => {
+            await removeFromCart(ci.product.id);
+            await load();
+          });
+          itemsDiv.appendChild(row);
+        });
+      }
+
+      load();
+    </script>
+  </body>
+  </html>
+
+
