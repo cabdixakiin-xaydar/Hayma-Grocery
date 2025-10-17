@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +24,14 @@ urlpatterns = [
     path('api/catalog/', include('catalog.urls')),
     path('api/orders/', include('orders.urls')),
     path('api/cart/', include('cart.urls')),
+    # Landing page
+    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    # Simple frontend pages
+    path('login', TemplateView.as_view(template_name='login.html'), name='login'),
+    path('register', TemplateView.as_view(template_name='register.html'), name='register'),
+    path('cart', TemplateView.as_view(template_name='cart.html'), name='cart'),
+    path('checkout', TemplateView.as_view(template_name='checkout.html'), name='checkout'),
+    path('orders', TemplateView.as_view(template_name='orders.html'), name='orders'),
+    path('profile', TemplateView.as_view(template_name='profile.html'), name='profile'),
+    path('admin-frontend', TemplateView.as_view(template_name='admin.html'), name='admin_frontend'),
 ]
